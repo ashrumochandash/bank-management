@@ -161,41 +161,39 @@ public class CustomerInformationServiceImpl implements CustomerInformationServic
 		customerInfoList = bankRepository.findAll();
 		List<CustomerInformationDTO> customerInfoDtoList = new ArrayList<CustomerInformationDTO>();
 		for(CustomerInformation customerInfo : customerInfoList) {
-			CustomerInformationDTO customerInfoDto = new CustomerInformationDTO();
-			customerInfoDto.setCustomerId(customerInfo.getCustomerId());
-			customerInfoDto.setFirstName(customerInfo.getFirstName());
-			customerInfoDto.setLastName(customerInfo.getLastName());
-			customerInfoDto.setPhoneNumber(customerInfo.getPhoneNumber());
-			customerInfoDto.setEmail(customerInfo.getEmail());
-			List<AccountDTO> accountList = AccountList();
-			customerInfoDto.setAccountDTOList(accountList);
-			AddressDTO addressDto = setAddress();
-			customerInfoDto.setAddress(addressDto);
-			customerInfoDtoList.add(customerInfoDto);
+			CustomerInformationDTO customerInfoDTO = new CustomerInformationDTO();
+			customerInfoDTO.setCustomerId(customerInfo.getCustomerId());
+			customerInfoDTO.setFirstName(customerInfo.getFirstName());
+			customerInfoDTO.setLastName(customerInfo.getLastName());
+			customerInfoDTO.setPhoneNumber(customerInfo.getPhoneNumber());
+			customerInfoDTO.setEmail(customerInfo.getEmail());
+			List<AccountDTO> accountList = getAccountList(customerInfo.getAccountList());
+			customerInfoDTO.setAccountDTOList(accountList);
+			AddressDTO addressDTO = getAddress(customerInfo.getAddress());
+			customerInfoDTO.setAddress(addressDTO);
+			customerInfoDtoList.add(customerInfoDTO);
 		}
 		return customerInfoDtoList;
 	}
 
-	private AddressDTO setAddress() {
+	private AddressDTO getAddress(Address address) {
 		AddressDTO addressDTO = new AddressDTO();
-		Address address = new Address();
 		addressDTO.setAddress1(address.getAddress1());
 		addressDTO.setAddress2(address.getAddress2());
 		addressDTO.setZip(address.getZip());
 		return addressDTO;
 	}
 
-	private List<AccountDTO> AccountList() {
-		List<AccountDTO> accountDtoList = new ArrayList<AccountDTO>();
-		List<Account> accountList = new ArrayList<Account>();
+	private List<AccountDTO> getAccountList(List<Account> accountList) {
+		List<AccountDTO> accountDTOList = new ArrayList<AccountDTO>();
 		for(Account account: accountList) {
 			AccountDTO accountDto = new AccountDTO();
 			accountDto.setAccountNumber(account.getAccountPk().getAccountNumber());
 			accountDto.setAccountType(account.getAccountPk().getAccountType());
 			accountDto.setBalance(account.getBalance());
 			accountDto.setBankName(account.getBank().getBankName());
-			accountDtoList.add(accountDto);
+			accountDTOList.add(accountDto);
 		}
-		return accountDtoList;
+		return accountDTOList;
 	}
 }

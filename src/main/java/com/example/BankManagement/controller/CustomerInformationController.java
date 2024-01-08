@@ -40,23 +40,23 @@ public class CustomerInformationController {
 		}	
 	}
 	@GetMapping("/findCustomer/{id}")
-	public ResponseEntity<CustomerInformation> findCustomerById(@PathVariable Long customerId){
+	public ResponseEntity<?> findCustomerById(@PathVariable Long customerId){
 		CustomerInformation customerInformation = new CustomerInformation();
 		try {
 		customerInformation	= customerService.findById(customerId);
 		return new ResponseEntity<CustomerInformation>(customerInformation, HttpStatus.OK);
 		}catch (Exception e) {
-			return new ResponseEntity<CustomerInformation>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<String>("Unable to fetch the Record's",HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	@GetMapping("/findAllCustomer")
-	public ResponseEntity<List<CustomerInformationDTO>> findAll(){
+	public ResponseEntity<?> findAll(){
 		try {
 			List<CustomerInformationDTO> listCustomerInformation = new ArrayList<>();
 			listCustomerInformation = customerService.findAllCustomer();
 			return new ResponseEntity<List<CustomerInformationDTO>>(listCustomerInformation, HttpStatus.OK);
-		}catch (Exception e) {
-			return new ResponseEntity<List<CustomerInformationDTO>>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}catch (BusinessException e) {
+			return new ResponseEntity<String>("Unable to fetch the Record's",HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
