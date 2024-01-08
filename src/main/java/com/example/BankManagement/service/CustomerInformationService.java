@@ -12,5 +12,5 @@ public interface CustomerInformationService {
 	public CustomerInformation findById(long customerId);
 	public String deleteCustomerById(long customerId);
 	public String updateCustomerById(long customerId);
-	public List<CustomerInformation> findAllStudent();
+	public List<CustomerInformationDTO> findAllCustomer();
 }

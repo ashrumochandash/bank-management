@@ -50,13 +50,13 @@ public class CustomerInformationController {
 		}
 	}
 	@GetMapping("/findAllCustomer")
-	public ResponseEntity<List<CustomerInformation>> findAll(){
+	public ResponseEntity<List<CustomerInformationDTO>> findAll(){
 		try {
-			List<CustomerInformation> listCustomerInformation = new ArrayList<>();
-			listCustomerInformation = customerService.findAllStudent();
-			return new ResponseEntity<List<CustomerInformation>>(listCustomerInformation, HttpStatus.OK);
+			List<CustomerInformationDTO> listCustomerInformation = new ArrayList<>();
+			listCustomerInformation = customerService.findAllCustomer();
+			return new ResponseEntity<List<CustomerInformationDTO>>(listCustomerInformation, HttpStatus.OK);
 		}catch (Exception e) {
-			return new ResponseEntity<List<CustomerInformation>>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<List<CustomerInformationDTO>>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
