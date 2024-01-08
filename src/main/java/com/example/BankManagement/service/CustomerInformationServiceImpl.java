@@ -156,9 +156,44 @@ public class CustomerInformationServiceImpl implements CustomerInformationServic
 	}
 
 	@Override
-	public List<CustomerInformation> findAllStudent() {
+	public List<CustomerInformationDTO> findAllCustomer() {
 		List<CustomerInformation> customerInfoList = new ArrayList<CustomerInformation>();
 		customerInfoList = bankRepository.findAll();
-		return customerInfoList;
+		List<CustomerInformationDTO> customerInfoDtoList = new ArrayList<CustomerInformationDTO>();
+		for(CustomerInformation customerInfo : customerInfoList) {
+			CustomerInformationDTO customerInfoDTO = new CustomerInformationDTO();
+			customerInfoDTO.setCustomerId(customerInfo.getCustomerId());
+			customerInfoDTO.setFirstName(customerInfo.getFirstName());
+			customerInfoDTO.setLastName(customerInfo.getLastName());
+			customerInfoDTO.setPhoneNumber(customerInfo.getPhoneNumber());
+			customerInfoDTO.setEmail(customerInfo.getEmail());
+			List<AccountDTO> accountList = getAccountList(customerInfo.getAccountList());
+			customerInfoDTO.setAccountDTOList(accountList);
+			AddressDTO addressDTO = getAddress(customerInfo.getAddress());
+			customerInfoDTO.setAddress(addressDTO);
+			customerInfoDtoList.add(customerInfoDTO);
+		}
+		return customerInfoDtoList;
+	}
+
+	private AddressDTO getAddress(Address address) {
+		AddressDTO addressDTO = new AddressDTO();
+		addressDTO.setAddress1(address.getAddress1());
+		addressDTO.setAddress2(address.getAddress2());
+		addressDTO.setZip(address.getZip());
+		return addressDTO;
+	}
+
+	private List<AccountDTO> getAccountList(List<Account> accountList) {
+		List<AccountDTO> accountDTOList = new ArrayList<AccountDTO>();
+		for(Account account: accountList) {
+			AccountDTO accountDto = new AccountDTO();
+			accountDto.setAccountNumber(account.getAccountPk().getAccountNumber());
+			accountDto.setAccountType(account.getAccountPk().getAccountType());
+			accountDto.setBalance(account.getBalance());
+			accountDto.setBankName(account.getBank().getBankName());
+			accountDTOList.add(accountDto);
+		}
+		return accountDTOList;
 	}
 }
