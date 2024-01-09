@@ -9,8 +9,8 @@ import com.example.BankManagement.entity.CustomerInformation;
 public interface CustomerInformationService {
 	
 	public CustomerInformationDTO createCustomer(CustomerInformationDTO customerInfo);
-	public CustomerInformation findById(long customerId);
+	public CustomerInformationDTO findById(long customerId);
 	public String deleteCustomerById(long customerId);
-	public String updateCustomerById(long customerId);
+	public String updateCustomer(CustomerInformationDTO customerInformationDTO,  long customerId);
 	public List<CustomerInformationDTO> findAllCustomer();
 }

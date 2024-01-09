@@ -2,6 +2,7 @@ package com.example.BankManagement.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -9,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.BankManagement.controller.CustomerInformationController;
 import com.example.BankManagement.dto.AccountDTO;
 import com.example.BankManagement.dto.AddressDTO;
 import com.example.BankManagement.dto.CustomerInformationDTO;
@@ -139,8 +141,19 @@ public class CustomerInformationServiceImpl implements CustomerInformationServic
 		
 	}
 	@Override
-	public CustomerInformation findById(long customerId) {
-		return bankRepository.findById(customerId).orElse(null);
+	public CustomerInformationDTO findById(long customerId) {
+		 CustomerInformation customerInformation = new CustomerInformation();
+		 customerInformation = bankRepository.findById(customerId).orElse(null);
+		 CustomerInformationDTO customerInformationDTO = new CustomerInformationDTO();
+		 customerInformationDTO.setCustomerId(customerInformation.getCustomerId());
+		 customerInformationDTO.setFirstName(customerInformation.getFirstName());
+		 customerInformationDTO.setPhoneNumber(customerInformation.getPhoneNumber());
+		 customerInformationDTO.setEmail(customerInformation.getEmail());
+		 List<AccountDTO> accountList = getAccountList(customerInformation.getAccountList());
+		 customerInformationDTO.setAccountDTOList(accountList);
+		 AddressDTO addressDTO = getAddress(customerInformation.getAddress());
+		 customerInformationDTO.setAddress(addressDTO);
+		 return customerInformationDTO;
 	}
 
 	@Override
@@ -149,11 +162,7 @@ public class CustomerInformationServiceImpl implements CustomerInformationServic
 		return "Customer removed !! "+ customerId;
 	}
 
-	@Override
-	public String updateCustomerById(long customerId) {
-		
-		return null;
-	}
+	
 
 	@Override
 	public List<CustomerInformationDTO> findAllCustomer() {
@@ -195,5 +204,25 @@ public class CustomerInformationServiceImpl implements CustomerInformationServic
 			accountDTOList.add(accountDto);
 		}
 		return accountDTOList;
+	}
+
+	@Override
+	public String updateCustomer(CustomerInformationDTO customerInformationDTO, long customerId) {
+		List<Bank> bankList = new ArrayList<Bank>();
+		bankList = bankRepo.findAll();
+		CustomerInformation customerInfo = bankRepository.findById(customerId).get();
+		
+		customerInfo.setFirstName(customerInformationDTO.getFirstName());
+		customerInfo.setLastName(customerInformationDTO.getLastName());
+		customerInfo.setPhoneNumber(customerInformationDTO.getPhoneNumber());
+		customerInfo.setEmail(customerInformationDTO.getEmail());
+		List<Account> accountList = populateAccount(customerInformationDTO.getAccountDTOList(),bankList, customerInfo);
+		customerInfo.setAccountList(accountList);
+		Address address = populateAddress(customerInformationDTO.getAddress());
+		customerInfo.setAddress(address);
+		bankRepository.save(customerInfo);
+		return "Customer Updated !! "+ customerId;
+		
+		
 	}
 }
