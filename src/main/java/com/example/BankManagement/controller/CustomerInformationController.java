@@ -41,11 +41,12 @@ public class CustomerInformationController {
 			return new ResponseEntity<Object>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}	
 	}
+	
 	@GetMapping("/findCustomer/{id}")
-	public ResponseEntity<?> findCustomerById(@PathVariable Long customerId){
+	public ResponseEntity<?> findCustomerById(@PathVariable long id){
 		CustomerInformationDTO customerInformationDTO = new CustomerInformationDTO();
 		try {
-		customerInformationDTO	= customerService.findById(customerId);
+		customerInformationDTO	= customerService.findById(id);
 		return new ResponseEntity<CustomerInformationDTO>(customerInformationDTO, HttpStatus.OK);
 		}catch (Exception e) {
 			return new ResponseEntity<String>("Unable to fetch the Record's",HttpStatus.INTERNAL_SERVER_ERROR);
@@ -63,9 +64,9 @@ public class CustomerInformationController {
 	}
 	
 	@DeleteMapping("/deleteCustomer/{id}")
-	public ResponseEntity<String> deleteById(@PathVariable long studentId){
+	public ResponseEntity<String> deleteById(@PathVariable long id){
 		try {
-			customerService.deleteCustomerById(studentId);
+			customerService.deleteCustomerById(id);
 			return new ResponseEntity<String>("Your Data is Deleted", HttpStatus.OK);
 		}catch (Exception e) {
 			return new ResponseEntity<String>("Your data is not Deleted", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -74,11 +75,11 @@ public class CustomerInformationController {
 	
 	@PutMapping("/updateCustomer/{id}")
 	public ResponseEntity<String> updateCustomer(@RequestBody CustomerInformationDTO customerInformationDTO,
-			@PathVariable long customerId){
+			@PathVariable long id){
 		try {
-			CustomerInformationDTO customerInfoDTO = customerService.findById(customerId);
+			CustomerInformationDTO customerInfoDTO = customerService.findById(id);
 			if (customerInfoDTO != null) {
-				customerService.updateCustomer(customerInformationDTO, customerId);
+				customerService.updateCustomer(customerInformationDTO, id);
 				return new ResponseEntity<String>("Success", HttpStatus.OK);
 			} else {
 				return new ResponseEntity<String>("Requested Entity Does not exist", HttpStatus.BAD_REQUEST);
